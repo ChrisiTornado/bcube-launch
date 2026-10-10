@@ -1,0 +1,131 @@
+---
+const problems = [
+  { title: 'Teuer', value: '60–100 €', text: 'kostet eine Stunde im klassischen Tonstudio – zu viel für ein Demo oder eine schnelle Idee.' },
+  { title: 'Unflexibel', value: 'Termine', text: 'abstimmen, Schlüssel abholen, Mindestbuchungen: Kreativität hält sich nicht an Öffnungszeiten.' },
+  { title: 'Kein Equipment', value: 'Home-Setup', text: 'statt Profi-Mikro: Viele haben schlicht keinen Zugang zu hochwertiger Ausrüstung.' },
+];
+---
+
+<section class="section" aria-labelledby="problem-title" data-section="problem">
+  <div class="container ps">
+    <div>
+      <p class="eyebrow">Das Problem</p>
+      <h2 id="problem-title" class="section-title">Gute Musik scheitert zu oft am Raum.</h2>
+      <p class="section-lead">Tausende Musiker:innen in Österreich stehen vor denselben Hürden – egal ob Solo-Artist, Band oder Producer.</p>
+      <ul class="ps__problems">
+        {
+          problems.map((p) => (
+            <li class="card">
+              <span class="ps__label">{p.title}</span>
+              <strong>{p.value}</strong>
+              <p>{p.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+    <div class="ps__solution card">
+      <p class="eyebrow">Unsere Lösung</p>
+      <h3>Mobile Recording-Studios – professionell, werbefinanziert, nachhaltig.</h3>
+      <p>
+        BCube stellt kompakte Profi-Studios dorthin, wo du bist: an Bahnhöfe, Unis und Plätze in der Stadt. Weil Werbepartner einen Großteil der
+        Kosten tragen, zahlst du nur einen Bruchteil – und buchst genau die Stunden, die du brauchst.
+      </p>
+      <ul class="ps__checks">
+        <li>Keine Monatsmiete, kein Mindestumsatz</li>
+        <li>Keine Schlüsselübergabe – Zutritt per Code</li>
+        <li>Profi-Equipment ist schon da, du bringst nur deine Musik</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .ps {
+    display: grid;
+    gap: var(--space-2xl);
+  }
+  .ps__problems {
+    list-style: none;
+    margin: var(--space-xl) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-md);
+  }
+  .ps__problems li {
+    padding: var(--space-lg);
+    border-color: var(--bcube-line-soft);
+  }
+  .ps__label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: var(--fw-black);
+    letter-spacing: var(--tracking-eyebrow);
+    text-transform: uppercase;
+    color: var(--bcube-text-faint);
+  }
+  .ps__problems strong {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 1.6rem;
+    font-weight: var(--fw-black);
+    color: var(--bcube-orange);
+  }
+  .ps__problems p {
+    color: var(--bcube-text-soft);
+  }
+  .ps__solution {
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border-radius: var(--radius-panel);
+    border-color: var(--bcube-orange-a42);
+    background:
+      radial-gradient(circle at 100% 0%, var(--bcube-orange-a16), transparent 55%),
+      rgba(15, 15, 15, 0.9);
+    align-self: start;
+  }
+  .ps__solution h3 {
+    font-size: clamp(1.4rem, 2.6vw, 1.9rem);
+  }
+  .ps__solution > p {
+    margin-top: var(--space-md);
+    color: var(--bcube-text-soft);
+  }
+  .ps__checks {
+    list-style: none;
+    margin: var(--space-lg) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-sm);
+  }
+  .ps__checks li {
+    position: relative;
+    padding-left: 2rem;
+    font-weight: var(--fw-semibold);
+  }
+  .ps__checks li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.2em;
+    width: 1.3rem;
+    height: 1.3rem;
+    border-radius: 50%;
+    background: var(--bcube-orange)
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23111' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round' d='m5 10.5 3.2 3L15 6.5'/%3E%3C/svg%3E")
+      center / 0.9rem no-repeat;
+  }
+  @media (min-width: 768px) {
+    .ps__problems {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .ps {
+      grid-template-columns: 1.3fr 1fr;
+      align-items: end;
+    }
+    .ps__problems {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

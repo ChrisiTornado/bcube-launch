@@ -1,0 +1,99 @@
+---
+import { faq } from '../data/faq';
+---
+
+<section id="faq" class="section" aria-labelledby="faq-title" data-section="faq">
+  <div class="container faq-wrap">
+    <div>
+      <p class="eyebrow">FAQ</p>
+      <h2 id="faq-title" class="section-title">Häufige Fragen</h2>
+      <p class="section-lead">Deine Frage ist nicht dabei? Schreib uns an <a href="mailto:hallo@bcube.at">hallo@bcube.at</a>.</p>
+    </div>
+    <div class="faq">
+      {
+        faq.map((item) => (
+          <details class="faq__item" data-faq-id={item.id}>
+            <summary>
+              <span>{item.question}</span>
+              <span class="faq__icon" aria-hidden="true" />
+            </summary>
+            <div class="faq__answer">
+              <p set:html={item.answer} />
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-wrap {
+    display: grid;
+    gap: var(--space-2xl);
+  }
+  .faq {
+    display: grid;
+    gap: var(--space-sm);
+  }
+  .faq__item {
+    border-radius: var(--radius-md);
+    border: 1px solid var(--bcube-line-soft);
+    background: var(--bcube-panel-soft);
+    transition: border-color 0.2s ease;
+  }
+  .faq__item[open] {
+    border-color: var(--bcube-line);
+    background: var(--bcube-card-bg);
+  }
+  summary {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+    padding: var(--space-md) var(--space-lg);
+    font-weight: var(--fw-bold);
+    cursor: pointer;
+    border-radius: var(--radius-md);
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq__icon {
+    flex: none;
+    position: relative;
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 50%;
+    background: var(--bcube-orange-a12);
+    border: 1px solid var(--bcube-orange-a28);
+  }
+  .faq__icon::before,
+  .faq__icon::after {
+    content: '';
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 0.7rem;
+    height: 2px;
+    background: var(--bcube-orange);
+    transform: translate(-50%, -50%);
+    transition: transform 0.2s ease;
+  }
+  .faq__icon::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+  }
+  [open] .faq__icon::after {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  .faq__answer {
+    padding: 0 var(--space-lg) var(--space-lg);
+    color: var(--bcube-text-soft);
+  }
+  @media (min-width: 1024px) {
+    .faq-wrap {
+      grid-template-columns: 0.8fr 1.2fr;
+      align-items: start;
+    }
+  }
+</style>

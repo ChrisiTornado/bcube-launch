@@ -1,0 +1,115 @@
+---
+import { Image } from 'astro:assets';
+import WaitlistForm from './WaitlistForm.astro';
+import cubeImage from '../assets/images/render-6.jpg';
+
+const benefits = [
+  { title: 'Mehr Auslastung', text: 'Deine freien Zeiten werden für Musiker:innen in deiner Stadt sichtbar – auf der Karte und in der App.' },
+  { title: 'Weniger Aufwand', text: 'Buchung, Online-Zahlung und auf Wunsch der Zutritt per Smartlock laufen über unsere Plattform.' },
+  { title: 'Du behältst die Kontrolle', text: 'Du bestimmst Preise, Zeiten und Ausstattung. Starte unverbindlich mit einem Gespräch.' },
+];
+---
+
+<section id="studios" class="section" aria-labelledby="operator-title" data-section="operator">
+  <div class="container">
+    <div class="operator card">
+      <div class="operator__copy">
+        <p class="eyebrow">Für Studiobetreiber:innen</p>
+        <h2 id="operator-title" class="section-title">Du hast ein Studio? Mach es buchbar.</h2>
+        <p class="section-lead">Neben unseren eigenen Cubes holen wir Partnerstudios auf die Plattform. Werde eines der ersten Partnerstudios zum Start.</p>
+        <ul class="operator__list">
+          {
+            benefits.map((b) => (
+              <li>
+                <strong>{b.title}</strong>
+                <span>{b.text}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <button
+          type="button"
+          class="btn btn-primary"
+          data-operator-toggle
+          aria-expanded="false"
+          aria-controls="operator-form"
+          data-cta-id="operator"
+          data-cta-location="operator"
+          data-cta-audience="operator"
+        >
+          Studio eintragen
+        </button>
+        <div class="operator__form" id="operator-form" data-operator-form hidden>
+          <h3>Dein Studio auf BCube</h3>
+          <p>Wir melden uns persönlich bei dir. Eine Gratis-Session gibt es für Partnerstudios nicht – sie gilt für Kund:innen.</p>
+          <WaitlistForm formId="partner_main" ctaLocation="operator" audience="operator" />
+        </div>
+      </div>
+      <div class="operator__media">
+        <Image
+          src={cubeImage}
+          alt="Ein BCube-Studiowürfel steht tagsüber vor historischen Gebäuden in Wien."
+          widths={[480, 800, 1100]}
+          sizes="(min-width: 1024px) 40vw, 100vw"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .operator {
+    display: grid;
+    overflow: hidden;
+    border-radius: var(--radius-panel);
+    background:
+      radial-gradient(circle at 0% 100%, var(--bcube-orange-a12), transparent 50%),
+      rgba(15, 15, 15, 0.92);
+  }
+  .operator__copy {
+    padding: clamp(1.5rem, 5vw, 3rem);
+  }
+  .operator__list {
+    list-style: none;
+    margin: var(--space-xl) 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-md);
+  }
+  .operator__list li {
+    display: grid;
+    gap: 0.15rem;
+    padding-left: var(--space-md);
+    border-left: 3px solid var(--bcube-orange);
+  }
+  .operator__list span {
+    color: var(--bcube-text-soft);
+  }
+  .operator__form {
+    margin-top: var(--space-lg);
+    padding: clamp(1.1rem, 3vw, 1.6rem);
+    border-radius: var(--radius-card);
+    border: 1px solid var(--bcube-orange-a42);
+    background: rgba(255, 255, 255, 0.03);
+  }
+  .operator__form h3 {
+    font-size: 1.25rem;
+  }
+  .operator__form > p {
+    margin: var(--space-xs) 0 var(--space-lg);
+    color: var(--bcube-text-soft);
+    font-size: 0.92rem;
+  }
+  .operator__media :global(img) {
+    width: 100%;
+    height: 100%;
+    min-height: 16rem;
+    object-fit: cover;
+  }
+  @media (min-width: 1024px) {
+    .operator {
+      grid-template-columns: 1.15fr 0.85fr;
+    }
+  }
+</style>

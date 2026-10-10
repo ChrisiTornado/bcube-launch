@@ -1,0 +1,72 @@
+---
+import WaitlistForm from './WaitlistForm.astro';
+import { LAUNCH_DATE_LABEL } from '../lib/config';
+
+const perks = [
+  'Gratis 4-Stunden-Session in einem BCube deiner Wahl',
+  `Erfahre als Erste:r, wann du ab ${LAUNCH_DATE_LABEL} buchen kannst`,
+  'Kein Abo, keine Verpflichtung – nur Infos zum Start',
+];
+---
+
+<section id="vormerken" class="section" aria-labelledby="waitlist-title" data-section="waitlist">
+  <div class="container wl">
+    <div class="wl__intro">
+      <p class="eyebrow">Early Access</p>
+      <h2 id="waitlist-title" class="section-title">Sichere dir deine erste Session gratis.</h2>
+      <p class="section-lead">Trag dich ein und wir melden uns, sobald du buchen kannst. Alle vorgemerkten Kund:innen bekommen zum Start einen Gutschein über 4 Stunden.</p>
+      <ul class="wl__perks">
+        {perks.map((p) => <li>{p}</li>)}
+      </ul>
+    </div>
+    <div class="wl__form card">
+      <WaitlistForm formId="waitlist_main" ctaLocation="waitlist" />
+    </div>
+  </div>
+</section>
+
+<style>
+  .wl {
+    display: grid;
+    gap: var(--space-2xl);
+  }
+  .wl__perks {
+    list-style: none;
+    margin: var(--space-xl) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-sm);
+  }
+  .wl__perks li {
+    position: relative;
+    padding-left: 1.9rem;
+    font-weight: var(--fw-semibold);
+  }
+  .wl__perks li::before {
+    content: '';
+    position: absolute;
+    left: 0.2rem;
+    top: 0.45em;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 3px;
+    background: var(--bcube-orange);
+    transform: rotate(45deg);
+  }
+  .wl__form {
+    padding: clamp(1.25rem, 4vw, 2.25rem);
+    border-radius: var(--radius-panel);
+    border-color: var(--bcube-orange-a42);
+    position: relative;
+  }
+  @media (min-width: 1024px) {
+    .wl {
+      grid-template-columns: 0.9fr 1.1fr;
+      align-items: start;
+    }
+    .wl__intro {
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+    }
+  }
+</style>

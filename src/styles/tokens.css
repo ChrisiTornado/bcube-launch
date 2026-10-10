@@ -1,0 +1,73 @@
+/*
+ * Design-Tokens 1:1 aus bcube-web/src/styles.scss und bcube-ios/Theme/BcubeTheme.swift.
+ * Neue Werte nur ergänzen, wenn die App sie ebenfalls verwendet.
+ */
+:root {
+  color-scheme: dark;
+
+  /* Farben */
+  --bcube-orange: #ffa722;
+  --bcube-orange-strong: #ffb53f;
+  --bcube-black: #0b0b0b;
+  --bcube-ink: #111111; /* Text auf Orange, Marker, Verlaufsstart */
+  --bcube-gray-900: #1a1a1a;
+  --bcube-deep: #050505;
+  --bcube-panel: rgba(18, 18, 18, 0.88);
+  --bcube-panel-soft: rgba(255, 255, 255, 0.04);
+  --bcube-line: rgba(255, 167, 34, 0.22);
+  --bcube-line-soft: rgba(255, 255, 255, 0.08);
+  --bcube-text: #ffffff;
+  --bcube-text-soft: rgba(255, 255, 255, 0.72);
+  --bcube-text-faint: rgba(255, 255, 255, 0.45);
+  --bcube-success: #5fe07b;
+  --bcube-error: #f38b8b;
+
+  --bcube-orange-a08: rgba(255, 167, 34, 0.08);
+  --bcube-orange-a12: rgba(255, 167, 34, 0.12);
+  --bcube-orange-a16: rgba(255, 167, 34, 0.16);
+  --bcube-orange-a18: rgba(255, 167, 34, 0.18);
+  --bcube-orange-a28: rgba(255, 167, 34, 0.28);
+  --bcube-orange-a42: rgba(255, 167, 34, 0.42);
+
+  /* Flächen */
+  --bcube-card-bg:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015)),
+    rgba(15, 15, 15, 0.88);
+  --bcube-page-bg:
+    radial-gradient(circle at 12% 16%, rgba(255, 167, 34, 0.2), transparent 24%),
+    radial-gradient(circle at 88% 84%, rgba(255, 167, 34, 0.16), transparent 26%),
+    linear-gradient(135deg, #111111 0%, #1a1a1a 48%, #0b0b0b 100%);
+
+  /* Schatten */
+  --bcube-shadow: 0 22px 60px rgba(0, 0, 0, 0.28);
+  --bcube-shadow-button: 0 12px 26px rgba(0, 0, 0, 0.16);
+
+  /* Typografie */
+  --bcube-font: "Avenir Next", "Montserrat", "Segoe UI", system-ui, sans-serif;
+  --fw-regular: 400;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-black: 800;
+  --tracking-title: 0.06em;
+  --tracking-eyebrow: 0.08em;
+
+  /* Abstände (iOS: xs 8, sm 12, md 16, lg 24, xl 32) */
+  --space-xs: 0.5rem;
+  --space-sm: 0.75rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  /* Vertikaler Abstand je Abschnitt (oben und unten). Bewusst kompakt, damit Ankersprünge sauber landen. */
+  --space-section: clamp(2.25rem, 5vw, 3.75rem);
+
+  /* Radien */
+  --radius-input: 16px;
+  --radius-md: 18px;
+  --radius-card: 24px;
+  --radius-panel: 30px;
+  --radius-pill: 999px;
+
+  --container: 72rem;
+  --header-h: 4.25rem;
+}

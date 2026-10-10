@@ -1,0 +1,38 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { CONTACT_EMAIL, LAUNCH_DATE_LABEL } from '../lib/config';
+---
+
+<Legal title="Teilnahmebedingungen Gratis-Session" description="Bedingungen für die gratis 4-Stunden-Session für vorgemerkte Nutzer:innen von BCube." updated="Oktober 2026">
+  <p class="placeholder">Entwurf – Fristen und Bedingungen vor dem Launch final festlegen und prüfen lassen.</p>
+
+  <h2>1. Angebot</h2>
+  <p>
+    Wer sich auf dieser Website für BCube vormerkt und die E-Mail-Adresse über den Bestätigungslink bestätigt, erhält zum Start am {LAUNCH_DATE_LABEL} einen
+    Gutscheincode für eine kostenlose Session von 4 Stunden in einem BCube-Studio (eigene Cubes, keine Partnerstudios).
+  </p>
+  <p>
+    Das Angebot richtet sich an Kund:innen (Musiker:innen, Bands, Producer:innen, Content Creator, Studierende). <strong>Studiobetreiber:innen, die ihr
+    Studio über das Formular als Partnerstudio anfragen, erhalten keine Gratis-Session</strong>; ihre Anfrage dient allein der Kontaktaufnahme für eine
+    Partnerschaft.
+  </p>
+
+  <h2>2. Teilnahme</h2>
+  <ul>
+    <li>Die Vormerkung muss bis <span class="placeholder">[31. Jänner 2027]</span> bestätigt sein.</li>
+    <li>Pro Person und E-Mail-Adresse gibt es einen Gutschein. Mehrfachanmeldungen, z. B. mit Wegwerfadressen, können ausgeschlossen werden.</li>
+    <li>Teilnahme ab <span class="placeholder">[16]</span> Jahren; die Buchung erfordert ein BCube-Konto.</li>
+  </ul>
+
+  <h2>3. Einlösung</h2>
+  <ul>
+    <li>Der Gutschein wird in der BCube-App bei der Buchung eingelöst und gilt für 4 zusammenhängende Stunden.</li>
+    <li>Einlösbar bis <span class="placeholder">[30. April 2027]</span>, solange freie Slots verfügbar sind.</li>
+    <li>Keine Barablöse, nicht übertragbar, nicht mit anderen Aktionen kombinierbar.</li>
+  </ul>
+
+  <h2>4. Sonstiges</h2>
+  <p>
+    Verschiebt sich der Start, verlängert sich die Einlösefrist entsprechend. Fragen an <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+  </p>
+</Legal>

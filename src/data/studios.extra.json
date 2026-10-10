@@ -1,0 +1,15 @@
+{
+  "$comment": "Kampagnentexte und Ergänzungen zu den exportierten Studios. overrides: Schlüssel = slug aus dem Studionamen. additional: Standorte, die (noch) nicht im System sind. Nur öffentliche Angaben eintragen!",
+  "overrides": {
+    "bcube-studio-hauptbahnhof": {
+      "kind": "cube",
+      "status": "coming_soon",
+      "statusLabel": "Ab 1. Februar 2027",
+      "teaser": "Unser erster Cube direkt am Wiener Hauptbahnhof – Profi-Recording rund um die Uhr, bestens erreichbar mit den Öffis.",
+      "hidePrice": true,
+      "name": "BCube Hauptbahnhof Wien",
+      "sortOrder": 1
+    }
+  },
+  "additional": []
+}

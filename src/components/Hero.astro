@@ -1,0 +1,200 @@
+---
+import { Picture } from 'astro:assets';
+import heroImage from '../assets/images/cube-city.jpg';
+import { LAUNCH_DATE_LABEL } from '../lib/config';
+
+const stats = [
+  { value: '20 €/h', label: 'statt 60–100 € im Studio' },
+  { value: '10 €/h', label: 'Student-Rate' },
+  { value: '24/7', label: 'buchbar & zugänglich' },
+  { value: '100 %', label: 'nachhaltig gebaut' },
+];
+---
+
+<section class="hero" aria-labelledby="hero-title" data-section="hero">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <p class="pill hero__pill"><span class="hero__dot" aria-hidden="true"></span> Start am {LAUNCH_DATE_LABEL} · Wien</p>
+      <h1 id="hero-title" class="hero__title">
+        Dein Studio.<br />
+        <span>Rund um die Uhr.</span>
+      </h1>
+      <p class="hero__lead">
+        BCube bringt professionelle Recording-Studios mitten in die Stadt – mit Neumann U87 Ai, FLEA 47 und DAD-Interfaces.
+        Online buchen, mit deinem Code rein, aufnehmen. Ab 20 € pro Stunde.
+      </p>
+      <div class="hero__offer card">
+        <p class="hero__offer-title">Deine erste Session geht auf uns</p>
+        <p class="hero__offer-text">Merk dich jetzt vor und sichere dir eine <strong>gratis 4-Stunden-Session</strong> zum Start.</p>
+      </div>
+      <div class="hero__actions">
+        <a href="#vormerken" class="btn btn-primary" data-cta-id="hero_primary" data-cta-location="hero">Gratis-Session sichern</a>
+        <a href="#standorte" class="btn btn-outline" data-cta-id="hero_map" data-cta-location="hero">Standorte ansehen</a>
+      </div>
+      <p class="hero__note">Kostenlos und unverbindlich. Abmeldung jederzeit möglich.</p>
+    </div>
+
+    <figure class="hero__media">
+      <Picture
+        src={heroImage}
+        formats={['avif', 'webp']}
+        widths={[480, 720, 960, 1280]}
+        sizes="(min-width: 1024px) 560px, 100vw"
+        alt="Ein weißer BCube-Studiowürfel mit begrüntem Dach steht nachts in der Wiener Innenstadt."
+        loading="eager"
+        fetchpriority="high"
+        class="hero__img"
+      />
+      <figcaption class="hero__badge">
+        <strong>Mobiles Recording-Studio</strong>
+        <span>Massivholz · Gründach · barrierefrei</span>
+      </figcaption>
+    </figure>
+  </div>
+
+  <div class="container">
+    <ul class="hero__stats" aria-label="BCube in Zahlen">
+      {
+        stats.map((s) => (
+          <li>
+            <strong>{s.value}</strong>
+            <span>{s.label}</span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    padding-block: clamp(1.5rem, 4vw, 3rem) var(--space-section);
+  }
+  .hero__grid {
+    display: grid;
+    gap: var(--space-2xl);
+    align-items: center;
+  }
+  .hero__pill {
+    margin-bottom: var(--space-lg);
+  }
+  .hero__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: var(--bcube-orange);
+    box-shadow: 0 0 0 4px var(--bcube-orange-a16);
+  }
+  .hero__title {
+    font-size: clamp(2.6rem, 8vw, 4.75rem);
+    letter-spacing: 0.01em;
+    text-transform: uppercase;
+    line-height: 0.98;
+  }
+  .hero__title span {
+    color: var(--bcube-orange);
+  }
+  .hero__lead {
+    margin-top: var(--space-lg);
+    max-width: 38rem;
+    color: var(--bcube-text-soft);
+    font-size: clamp(1.05rem, 1.8vw, 1.2rem);
+  }
+  .hero__offer {
+    margin-top: var(--space-lg);
+    padding: var(--space-md) var(--space-lg);
+    border-color: var(--bcube-orange-a42);
+    background:
+      linear-gradient(120deg, var(--bcube-orange-a16), transparent 70%),
+      rgba(15, 15, 15, 0.88);
+    max-width: 34rem;
+  }
+  .hero__offer-title {
+    font-weight: var(--fw-black);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--bcube-orange);
+    font-size: 0.9rem;
+  }
+  .hero__offer-text {
+    margin-top: 0.25rem;
+  }
+  .hero__actions {
+    margin-top: var(--space-xl);
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+  }
+  .hero__actions .btn {
+    flex: 1 1 14rem;
+  }
+  .hero__note {
+    margin-top: var(--space-sm);
+    font-size: 0.88rem;
+    color: var(--bcube-text-faint);
+  }
+  .hero__media {
+    position: relative;
+    margin: 0;
+  }
+  .hero__media :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius-panel);
+    border: 1px solid var(--bcube-line);
+    box-shadow: var(--bcube-shadow);
+  }
+  .hero__badge {
+    position: absolute;
+    left: var(--space-md);
+    bottom: var(--space-md);
+    display: grid;
+    gap: 0.1rem;
+    padding: 0.7rem 1rem;
+    border-radius: var(--radius-md);
+    background: rgba(11, 11, 11, 0.82);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--bcube-line);
+    font-size: 0.85rem;
+  }
+  .hero__badge span {
+    color: var(--bcube-text-soft);
+  }
+  .hero__stats {
+    list-style: none;
+    margin: var(--space-2xl) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+  }
+  .hero__stats li {
+    display: grid;
+    gap: 0.15rem;
+    padding: var(--space-md);
+    border-radius: var(--radius-card);
+    border: 1px solid var(--bcube-line-soft);
+    background: var(--bcube-panel-soft);
+  }
+  .hero__stats strong {
+    font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+    font-weight: var(--fw-black);
+    color: var(--bcube-orange);
+    line-height: 1.1;
+  }
+  .hero__stats span {
+    color: var(--bcube-text-soft);
+    font-size: 0.9rem;
+  }
+  @media (min-width: 768px) {
+    .hero__stats {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .hero__grid {
+      grid-template-columns: 1.05fr 0.95fr;
+    }
+  }
+</style>

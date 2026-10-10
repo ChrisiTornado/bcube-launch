@@ -1,0 +1,16 @@
+# Kopieren nach terraform.tfvars (wird nicht eingecheckt) und anpassen.
+aws_region             = "eu-central-1"
+environment            = "prod"
+domain_name            = "bcube.at"
+alternate_domain_names = ["www.bcube.at"]
+
+# Route 53 Hosted Zone (leer = DNS-Records manuell beim Anbieter anlegen, siehe Outputs)
+route53_zone_id = ""
+
+mail_from_address = "hallo@bcube.at"
+mail_reply_to     = "hallo@bcube.at"
+notify_email      = "dein.name@example.com"
+
+github_repository = "ChrisiTornado/bcube-launch"
+# Falls im Konto schon ein GitHub-OIDC-Provider existiert (z. B. aus dem bcube-Stack):
+# github_oidc_provider_arn = "arn:aws:iam::123456789012:oidc-provider/token.actions.githubusercontent.com"

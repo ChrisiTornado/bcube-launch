@@ -1,0 +1,80 @@
+name: Deploy
+
+# Baut Website und Lambda und rollt beides aus. Infrastruktur (Terraform) wird bewusst manuell
+# angewendet (terraform plan/apply), damit Änderungen an DNS, Zertifikaten und Datenbank geprüft werden.
+#
+# Benötigte Repo-Variablen (Settings → Secrets and variables → Actions → Variables):
+#   AWS_DEPLOY_ROLE_ARN        terraform output github_deploy_role_arn
+#   AWS_REGION                 eu-central-1
+#   SITE_BUCKET                terraform output site_bucket
+#   CLOUDFRONT_DISTRIBUTION_ID terraform output cloudfront_distribution_id
+#   LAMBDA_FUNCTION_NAME       terraform output lambda_function_name
+#   PUBLIC_SITE_URL            https://bcube.at
+#   PUBLIC_PLAUSIBLE_DOMAIN    bcube.at
+#   PUBLIC_TURNSTILE_SITE_KEY  Site Key aus dem Cloudflare-Dashboard (öffentlich)
+#   PUBLIC_MAP_PMTILES_URL     z. B. https://bcube.at/tiles/austria.pmtiles (optional)
+#   PUBLIC_SHOW_SOCIAL_PROOF   false
+#   PUBLIC_LEAD_COUNT          (optional)
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-prod
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: prod
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+      - run: npm test
+
+      - name: Build Website
+        run: npm run build
+        env:
+          PUBLIC_SITE_URL: ${{ vars.PUBLIC_SITE_URL }}
+          PUBLIC_PLAUSIBLE_DOMAIN: ${{ vars.PUBLIC_PLAUSIBLE_DOMAIN }}
+          PUBLIC_TURNSTILE_SITE_KEY: ${{ vars.PUBLIC_TURNSTILE_SITE_KEY }}
+          PUBLIC_MAP_PMTILES_URL: ${{ vars.PUBLIC_MAP_PMTILES_URL }}
+          PUBLIC_SHOW_SOCIAL_PROOF: ${{ vars.PUBLIC_SHOW_SOCIAL_PROOF }}
+          PUBLIC_LEAD_COUNT: ${{ vars.PUBLIC_LEAD_COUNT }}
+
+      - name: Build Lambda
+        run: npm run build:function && (cd dist-function && zip -q ../lead.zip index.mjs)
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Lambda aktualisieren
+        run: |
+          aws lambda update-function-code --function-name "${{ vars.LAMBDA_FUNCTION_NAME }}" --zip-file fileb://lead.zip > /dev/null
+          aws lambda wait function-updated --function-name "${{ vars.LAMBDA_FUNCTION_NAME }}"
+
+      - name: Website hochladen
+        run: |
+          # Gehashte Assets: 1 Jahr unveränderlich cachen
+          aws s3 sync dist/_astro "s3://${{ vars.SITE_BUCKET }}/_astro" --cache-control "public,max-age=31536000,immutable"
+          # Alles andere (HTML, JSON, Bilder ohne Hash): immer revalidieren
+          aws s3 sync dist "s3://${{ vars.SITE_BUCKET }}" --delete --exclude "_astro/*" --exclude "tiles/*" --cache-control "public,max-age=0,must-revalidate"
+          # Alte, gehashte Assets erst nach dem HTML-Upload entfernen (laufende Besuche brechen nicht ab)
+          aws s3 sync dist/_astro "s3://${{ vars.SITE_BUCKET }}/_astro" --delete --cache-control "public,max-age=31536000,immutable"
+
+      - name: CloudFront-Cache leeren
+        run: aws cloudfront create-invalidation --distribution-id "${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}" --paths "/*" > /dev/null

@@ -1,0 +1,409 @@
+---
+import studiosFile from '../data/studios.json';
+import type { PublicStudio, StudiosFile } from '../lib/studios';
+import { kindText, statusText } from '../lib/studios';
+
+const { studios } = studiosFile as StudiosFile;
+const list: PublicStudio[] = studios;
+const cities = [...new Set(list.map((s) => s.city))];
+const hasPartner = list.some((s) => s.kind === 'partner');
+const osmLink = (s: PublicStudio) => `https://www.openstreetmap.org/?mlat=${s.lat}&mlon=${s.lng}#map=17/${s.lat}/${s.lng}`;
+---
+
+<section id="standorte" class="section" aria-labelledby="map-title" data-section="map">
+  <div class="container">
+    <p class="eyebrow">Standorte</p>
+    <h2 id="map-title" class="section-title">Hier entstehen die ersten Cubes.</h2>
+    <p class="section-lead">
+      Zum Start sind wir in {cities.join(' und ')}. Weitere Standorte und Partnerstudios folgen – sag uns im Formular, wo du einen Cube brauchst.
+    </p>
+
+    <div class="studio-map card" data-studio-map data-state="idle">
+      <div class="studio-map__canvas" data-map-canvas role="region" aria-label="Interaktive Karte der BCube-Standorte">
+        <div class="studio-map__placeholder">
+          <span class="studio-map__loader" aria-hidden="true"></span>
+          <span class="studio-map__loading-text">Karte wird geladen …</span>
+          <div class="studio-map__error" role="alert">
+            <p>
+              <strong>Die Karte konnte nicht geladen werden.</strong><br />
+              Das passiert z. B., wenn dein Browser WebGL deaktiviert hat oder Kartenkacheln blockiert werden. Alle Standorte findest du in der Liste –
+              dort kannst du sie auch direkt in OpenStreetMap öffnen.
+            </p>
+            <button type="button" class="btn btn-outline" data-map-retry>Erneut versuchen</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="studio-map__side">
+        {
+          hasPartner && (
+            <ul class="studio-map__legend" aria-label="Legende">
+              <li><span class="legend-dot legend-dot--cube" aria-hidden="true" /> BCube (eigene Studios)</li>
+              <li><span class="legend-dot legend-dot--partner" aria-hidden="true" /> Partnerstudio</li>
+            </ul>
+          )
+        }
+        <ul class="studio-list">
+          {
+            list.map((s) => (
+              <li>
+                <button type="button" class="studio-list__item" data-focus-studio={s.slug}>
+                  <span class={`legend-dot legend-dot--${s.kind}`} aria-hidden="true" />
+                  <span class="studio-list__text">
+                    <strong>{s.name}</strong>
+                    <span>{[s.street, [s.plz, s.city].filter(Boolean).join(' ')].filter(Boolean).join(', ')}</span>
+                    <span class="studio-list__status">
+                      {kindText(s)} · {statusText(s)}
+                    </span>
+                  </span>
+                </button>
+                <a class="studio-list__osm" href={osmLink(s)} target="_blank" rel="noopener" hidden>
+                  {s.name} in OpenStreetMap öffnen ↗
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <a href="#studios" class="studio-map__add" data-cta-id="map_add_studio" data-cta-location="map" data-cta-audience="operator" data-open-operator-form>
+          <strong>Dein Studio fehlt?</strong>
+          <span>Als Partnerstudio auf die Karte →</span>
+        </a>
+      </div>
+      <script type="application/json" set:html={JSON.stringify(list)} />
+    </div>
+  </div>
+</section>
+
+<style>
+  .studio-map {
+    margin-top: var(--space-2xl);
+    display: grid;
+    overflow: hidden;
+    border-radius: var(--radius-panel);
+  }
+  .studio-map__canvas {
+    position: relative;
+    height: clamp(27rem, 72vh, 34rem);
+    background:
+      radial-gradient(circle at 30% 40%, var(--bcube-orange-a12), transparent 40%),
+      repeating-linear-gradient(0deg, transparent 0 39px, rgba(255, 255, 255, 0.03) 39px 40px),
+      repeating-linear-gradient(90deg, transparent 0 39px, rgba(255, 255, 255, 0.03) 39px 40px),
+      #101010;
+  }
+  .studio-map__placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: var(--space-sm);
+    padding: var(--space-lg);
+    text-align: center;
+    color: var(--bcube-text-soft);
+  }
+  .studio-map__loader {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    border: 3px solid var(--bcube-orange-a28);
+    border-top-color: var(--bcube-orange);
+    animation: spin 0.9s linear infinite;
+  }
+  .studio-map__error {
+    display: none;
+    max-width: 30rem;
+    gap: var(--space-md);
+    justify-items: center;
+  }
+  .studio-map__error p {
+    color: var(--bcube-text-soft);
+    font-size: 0.95rem;
+  }
+  .studio-map__error strong {
+    color: var(--bcube-text);
+  }
+  [data-state='ready'] .studio-map__placeholder {
+    display: none;
+  }
+  [data-state='error'] .studio-map__loader,
+  [data-state='error'] .studio-map__loading-text {
+    display: none;
+  }
+  [data-state='error'] .studio-map__error {
+    display: grid;
+  }
+  [data-state='error'] .studio-list__osm {
+    display: block;
+  }
+  .studio-list__osm {
+    display: none;
+    margin-top: 0.3rem;
+    padding-left: var(--space-md);
+    font-size: 0.82rem;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .studio-map__side {
+    padding: var(--space-lg);
+    display: grid;
+    gap: var(--space-md);
+    align-content: start;
+    border-top: 1px solid var(--bcube-line-soft);
+  }
+  .studio-map__legend {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-xs) var(--space-lg);
+    font-size: 0.85rem;
+    color: var(--bcube-text-soft);
+  }
+  .studio-map__legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+  }
+  .legend-dot {
+    flex: none;
+    width: 0.85rem;
+    height: 0.85rem;
+    border-radius: 4px;
+    transform: rotate(45deg);
+  }
+  .legend-dot--cube {
+    background: var(--bcube-orange);
+  }
+  .legend-dot--partner {
+    background: var(--bcube-text);
+  }
+  .studio-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-xs);
+  }
+  .studio-list__item {
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-sm);
+    padding: var(--space-sm) var(--space-md);
+    text-align: left;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--bcube-line-soft);
+    background: var(--bcube-panel-soft);
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+  .studio-list__item .legend-dot {
+    margin-top: 0.35rem;
+  }
+  .studio-list__item:hover {
+    border-color: var(--bcube-orange-a42);
+    background: var(--bcube-orange-a08);
+  }
+  .studio-list__text {
+    display: grid;
+    gap: 0.1rem;
+    font-size: 0.9rem;
+    color: var(--bcube-text-soft);
+  }
+  .studio-list__text strong {
+    color: var(--bcube-text);
+    font-size: 1rem;
+  }
+  .studio-list__status {
+    color: var(--bcube-orange);
+    font-weight: var(--fw-semibold);
+    font-size: 0.82rem;
+  }
+  .studio-map__add {
+    display: grid;
+    gap: 0.1rem;
+    padding: var(--space-md);
+    border-radius: var(--radius-md);
+    border: 1px dashed var(--bcube-orange-a42);
+    color: var(--bcube-text);
+    text-decoration: none;
+  }
+  .studio-map__add span {
+    color: var(--bcube-orange);
+    font-size: 0.9rem;
+  }
+  @media (min-width: 1024px) {
+    .studio-map {
+      grid-template-columns: 1fr 22rem;
+    }
+    .studio-map__canvas {
+      height: 36rem;
+    }
+    .studio-map__side {
+      border-top: 0;
+      border-left: 1px solid var(--bcube-line-soft);
+      max-height: 36rem;
+      overflow-y: auto;
+    }
+  }
+
+  /* MapLibre-Elemente (außerhalb des Astro-Scopes erzeugt).
+     Alle Selektoren mit .studio-map davor: maplibre-gl.css wird erst später (lazy) geladen und
+     würde sonst bei gleicher Spezifität gewinnen (weißes Popup). */
+  :global(.studio-map .map-marker) {
+    width: 34px;
+    height: 42px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.45));
+  }
+  :global(.studio-map .map-marker svg) {
+    width: 100%;
+    height: 100%;
+  }
+  :global(.studio-map .map-marker--cube .map-marker__pin) {
+    fill: var(--bcube-orange);
+  }
+  :global(.studio-map .map-marker--partner .map-marker__pin) {
+    fill: var(--bcube-text);
+  }
+  :global(.studio-map .map-marker__cube) {
+    fill: var(--bcube-ink);
+  }
+  :global(.studio-map .maplibregl-popup) {
+    max-width: min(300px, calc(100% - 1.5rem)) !important;
+  }
+  :global(.studio-map .maplibregl-popup-content) {
+    padding: 0;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    background: #121212;
+    background-image: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+    border: 1px solid var(--bcube-orange-a42);
+    color: var(--bcube-text);
+    box-shadow: var(--bcube-shadow);
+    font-family: var(--bcube-font);
+  }
+  :global(.studio-map .maplibregl-popup-anchor-top .maplibregl-popup-tip),
+  :global(.studio-map .maplibregl-popup-anchor-top-left .maplibregl-popup-tip),
+  :global(.studio-map .maplibregl-popup-anchor-top-right .maplibregl-popup-tip) {
+    border-bottom-color: #121212;
+  }
+  :global(.studio-map .maplibregl-popup-anchor-bottom .maplibregl-popup-tip),
+  :global(.studio-map .maplibregl-popup-anchor-bottom-left .maplibregl-popup-tip),
+  :global(.studio-map .maplibregl-popup-anchor-bottom-right .maplibregl-popup-tip) {
+    border-top-color: #121212;
+  }
+  :global(.studio-map .maplibregl-popup-anchor-left .maplibregl-popup-tip) {
+    border-right-color: #121212;
+  }
+  :global(.studio-map .maplibregl-popup-anchor-right .maplibregl-popup-tip) {
+    border-left-color: #121212;
+  }
+  :global(.studio-map .maplibregl-popup-close-button) {
+    top: 0.4rem;
+    right: 0.4rem;
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: var(--bcube-text);
+    background: rgba(11, 11, 11, 0.75);
+    border-radius: 50%;
+  }
+  :global(.studio-map .maplibregl-popup-close-button:hover) {
+    background: var(--bcube-orange);
+    color: var(--bcube-ink);
+  }
+  :global(.studio-map .map-popup img) {
+    width: 100%;
+    height: 6rem;
+    object-fit: cover;
+    display: block;
+  }
+  :global(.studio-map .map-popup__body) {
+    padding: 0.8rem 1rem 1rem;
+    display: grid;
+    gap: 0.3rem;
+  }
+  :global(.studio-map .map-popup h3) {
+    margin: 0;
+    font-size: 1.05rem;
+    line-height: 1.25;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  :global(.studio-map .map-popup p) {
+    margin: 0;
+  }
+  :global(.studio-map .map-popup__meta) {
+    font-size: 0.78rem;
+    color: var(--bcube-orange);
+    font-weight: 600;
+  }
+  :global(.studio-map .map-popup__kind) {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    margin-right: 0.3rem;
+    border-radius: 999px;
+    background: var(--bcube-orange);
+    color: var(--bcube-ink);
+    font-weight: 800;
+  }
+  :global(.studio-map .map-popup__kind--partner) {
+    background: var(--bcube-text);
+  }
+  :global(.studio-map .map-popup__address),
+  :global(.studio-map .map-popup__teaser) {
+    font-size: 0.85rem;
+    color: var(--bcube-text-soft);
+    line-height: 1.45;
+  }
+  :global(.studio-map .map-popup__teaser) {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  :global(.studio-map .map-popup__cta) {
+    margin-top: 0.4rem;
+    min-height: 2.5rem;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    color: var(--bcube-ink);
+  }
+  /* Zoom-Buttons und Attribution im Dark-Look */
+  :global(.studio-map .maplibregl-ctrl-group) {
+    background: #121212;
+    border: 1px solid var(--bcube-orange-a28);
+    border-radius: 12px;
+    box-shadow: var(--bcube-shadow-button);
+    overflow: hidden;
+  }
+  :global(.studio-map .maplibregl-ctrl-group button + button) {
+    border-top: 1px solid var(--bcube-line-soft);
+  }
+  :global(.studio-map .maplibregl-ctrl-group button .maplibregl-ctrl-icon) {
+    filter: invert(1);
+  }
+  :global(.studio-map .maplibregl-ctrl-group button:hover) {
+    background-color: var(--bcube-orange-a16);
+  }
+  :global(.studio-map .maplibregl-ctrl-attrib.maplibregl-compact),
+  :global(.studio-map .maplibregl-ctrl-attrib) {
+    background: rgba(11, 11, 11, 0.8);
+    color: var(--bcube-text-soft);
+  }
+  :global(.studio-map .maplibregl-ctrl-attrib a) {
+    color: var(--bcube-text-soft);
+  }
+  :global(.studio-map .maplibregl-ctrl-attrib-button) {
+    filter: invert(1);
+  }
+</style>

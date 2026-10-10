@@ -1,0 +1,70 @@
+---
+import Logo from './Logo.astro';
+import { CONTACT_EMAIL } from '../lib/config';
+const year = new Date().getFullYear();
+---
+
+<footer class="footer" data-section="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <Logo size={36} />
+      <p>Musik braucht Raum – BCube macht Platz.</p>
+    </div>
+    <nav aria-label="Rechtliches und Kontakt">
+      <ul class="footer__links">
+        <li><a href="/impressum/">Impressum</a></li>
+        <li><a href="/datenschutz/">Datenschutz</a></li>
+        <li><a href="/teilnahmebedingungen/">Teilnahmebedingungen</a></li>
+        <li><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="container footer__legal">
+    <p>© {year} BCube. Preisangaben sind vorläufig, Änderungen bis zum Start vorbehalten.</p>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 1px solid var(--bcube-line-soft);
+    padding-block: var(--space-2xl) var(--space-xl);
+    background: rgba(5, 5, 5, 0.6);
+  }
+  .footer__inner {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-xl);
+  }
+  .footer__brand p {
+    margin-top: var(--space-sm);
+    color: var(--bcube-text-soft);
+  }
+  .footer__links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm) var(--space-lg);
+  }
+  .footer__links a {
+    color: var(--bcube-text-soft);
+    text-decoration: none;
+    font-weight: var(--fw-semibold);
+  }
+  .footer__links a:hover {
+    color: var(--bcube-orange);
+  }
+  .footer__legal {
+    margin-top: var(--space-xl);
+    color: var(--bcube-text-faint);
+    font-size: 0.85rem;
+  }
+  @media (min-width: 768px) {
+    .footer__inner {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+  }
+</style>

@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import ProblemSolution from '../components/ProblemSolution.astro';
+import Features from '../components/Features.astro';
+import Steps from '../components/Steps.astro';
+import StudioMap from '../components/StudioMap.astro';
+import SocialProof from '../components/SocialProof.astro';
+import WaitlistSection from '../components/WaitlistSection.astro';
+import Faq from '../components/Faq.astro';
+import Operator from '../components/Operator.astro';
+import { faq } from '../data/faq';
+import { config, CONTACT_EMAIL } from '../lib/config';
+
+const stripTags = (html: string) => html.replace(/<[^>]+>/g, '');
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: 'BCube',
+    url: config.siteUrl,
+    logo: new URL('/apple-touch-icon.png', config.siteUrl).href,
+    email: CONTACT_EMAIL,
+    slogan: 'Musik braucht Raum – BCube macht Platz.',
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: stripTags(f.answer) },
+    })),
+  },
+];
+---
+
+<Base
+  title="BCube – Dein Recording-Studio rund um die Uhr | Gratis-Session sichern"
+  description="Professionelle Recording-Studios mitten in Wien: 24/7 buchbar, ab 20 € pro Stunde, mit Neumann U87 Ai. Jetzt vormerken und eine gratis 4-Stunden-Session zum Start am 1. Februar 2027 sichern."
+  jsonLd={jsonLd}
+>
+  <Hero />
+  <ProblemSolution />
+  <Features />
+  <Steps />
+  <WaitlistSection />
+  <StudioMap />
+  <SocialProof />
+  <Operator />
+  <Faq />
+</Base>

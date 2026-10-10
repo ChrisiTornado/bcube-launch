@@ -1,0 +1,97 @@
+---
+import Logo from './Logo.astro';
+
+interface Props {
+  minimal?: boolean;
+}
+const { minimal = false } = Astro.props;
+// Auf der Startseite reine Anker: "/#…" würde bei ?utm_…-URLs neu laden und die Attribution verlieren.
+const base = Astro.url.pathname === '/' ? '' : '/';
+const links = [
+  { href: `${base}#funktionen`, label: 'Funktionen' },
+  { href: `${base}#ablauf`, label: 'So geht’s' },
+  { href: `${base}#standorte`, label: 'Standorte' },
+  { href: `${base}#studios`, label: 'Für Studios' },
+  { href: `${base}#faq`, label: 'FAQ' },
+];
+---
+
+<header class="header" data-header>
+  <div class="container header__inner">
+    <a href={base ? '/' : '#inhalt'} class="header__brand" aria-label="BCube Startseite">
+      <Logo size={36} />
+    </a>
+    {
+      !minimal && (
+        <nav aria-label="Hauptnavigation" class="header__nav">
+          <ul>
+            {links.map((l) => (
+              <li>
+                <a href={l.href}>{l.label}</a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )
+    }
+    <a href={`${base}#vormerken`} class="btn btn-primary header__cta" data-cta-id="nav" data-cta-location="header">
+      Vormerken
+    </a>
+  </div>
+</header>
+
+<style>
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--header-h);
+    display: flex;
+    align-items: center;
+    transition: background-color 0.25s ease, border-color 0.25s ease, backdrop-filter 0.25s ease;
+    border-bottom: 1px solid transparent;
+  }
+  .header:global(.is-scrolled) {
+    background: rgba(11, 11, 11, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom-color: var(--bcube-line-soft);
+  }
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-md);
+  }
+  .header__brand {
+    text-decoration: none;
+  }
+  .header__nav {
+    display: none;
+  }
+  .header__nav ul {
+    display: flex;
+    gap: var(--space-lg);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .header__nav a {
+    color: var(--bcube-text-soft);
+    font-weight: var(--fw-semibold);
+    font-size: 0.95rem;
+    text-decoration: none;
+  }
+  .header__nav a:hover {
+    color: var(--bcube-text);
+  }
+  .header__cta {
+    min-height: 2.6rem;
+    padding: 0.55rem 1.1rem;
+  }
+  @media (min-width: 900px) {
+    .header__nav {
+      display: block;
+    }
+  }
+</style>

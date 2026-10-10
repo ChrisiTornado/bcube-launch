@@ -1,0 +1,84 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { CONTACT_EMAIL } from '../lib/config';
+---
+
+<Legal title="Datenschutzerklärung" description="Wie BCube personenbezogene Daten auf dieser Website und bei der Vormerkung verarbeitet." updated="Oktober 2026">
+  <p class="placeholder">Vorlage – vor dem Launch mit den tatsächlich eingesetzten Diensten abgleichen und rechtlich prüfen lassen. Keine Rechtsberatung.</p>
+
+  <h2>1. Verantwortlicher</h2>
+  <p>
+    <span class="placeholder">[Firmenwortlaut, Anschrift]</span><br />
+    E-Mail: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+  </p>
+
+  <h2>2. Aufruf der Website und Hosting</h2>
+  <p>
+    Diese Website wird über Amazon Web Services (AWS) bereitgestellt (Amazon Web Services EMEA SARL, 38 Avenue John F. Kennedy, L-1855 Luxemburg). Inhalte
+    werden über das Content Delivery Network Amazon CloudFront ausgeliefert, Daten speichern wir im Rechenzentrum Frankfurt (eu-central-1). Beim Aufruf
+    verarbeitet AWS technisch notwendige Daten (IP-Adresse, Zeitpunkt, angeforderte Datei, Browser-Informationen), um die Seite auszuliefern und vor
+    Angriffen zu schützen. Rechtsgrundlage ist unser berechtigtes Interesse an einem sicheren und stabilen Betrieb (Art. 6 Abs. 1 lit. f DSGVO). Mit AWS
+    besteht ein Auftragsverarbeitungsvertrag. AWS ist unter dem EU-US Data Privacy Framework zertifiziert; zusätzlich gelten Standardvertragsklauseln.
+  </p>
+  <p>Schriften und Kartendaten liefern wir von unserem eigenen Server aus; dabei werden keine Daten an Google Fonts o. Ä. übertragen.</p>
+
+  <h2>3. Vormerkung (Early Access und Gratis-Session)</h2>
+  <p>Wenn du dich vormerkst, verarbeiten wir:</p>
+  <ul>
+    <li>E-Mail-Adresse (Pflicht), optional Vorname und Wunsch-Standort</li>
+    <li>deine Auswahl, was auf dich zutrifft (z. B. Band, Producer:in), bei Studiobetreiber:innen optional Name, Ort, Art und Website des Studios</li>
+    <li>Zeitpunkt und Text deiner Einwilligung sowie Zeitpunkt der Bestätigung (Nachweis nach Art. 7 Abs. 1 DSGVO)</li>
+    <li>Kampagneninformationen (z. B. utm_source, Herkunftsseite ohne Pfad), damit wir wissen, über welchen Kanal du uns gefunden hast</li>
+    <li>einen anonymisierten Hashwert deiner IP-Adresse zum Schutz vor Missbrauch (Begrenzung der Anfragen)</li>
+  </ul>
+  <p>
+    Zweck ist, dich als Kund:in über den Start von BCube zu informieren und dir deinen Gutschein zu senden. Studiobetreiber:innen kontaktieren wir
+    ausschließlich für ein Gespräch über eine Partnerschaft, sie erhalten keinen Gutschein. Rechtsgrundlage ist deine Einwilligung (Art. 6 Abs. 1 lit. a DSGVO, § 174 TKG 2021), die du jederzeit mit Wirkung für die Zukunft
+    widerrufen kannst – über den Abmeldelink in jeder E-Mail oder per Mail an uns.
+  </p>
+  <p>
+    <strong>Double Opt-in:</strong> Nach dem Absenden schicken wir dir eine E-Mail mit Bestätigungslink. Nicht bestätigte Vormerkungen löschen wir automatisch
+    nach 30 Tagen.
+  </p>
+  <p>
+    <strong>Speicherdauer:</strong> Bestätigte Vormerkungen speichern wir bis zu deinem Widerruf, längstens bis <span class="placeholder">[z. B. 31. Dezember 2027]</span>.
+  </p>
+  <p>
+    <strong>Empfänger:</strong> Die Daten speichern wir in Amazon DynamoDB, E-Mails versenden wir über Amazon Simple Email Service (beide AWS, Region Frankfurt).
+    Eine Weitergabe an Dritte zu Werbezwecken findet nicht statt.
+  </p>
+
+  <h2>4. Spamschutz mit Cloudflare Turnstile</h2>
+  <p>
+    Um das Formular vor automatisierten Anfragen zu schützen, nutzen wir Cloudflare Turnstile (Cloudflare, Inc., 101 Townsend St., San Francisco, CA 94107,
+    USA). Turnstile prüft anhand technischer Merkmale (u. a. IP-Adresse, Browser-Informationen), ob die Anfrage von einem Menschen stammt, und setzt dafür
+    keine Cookies zu Werbezwecken. Das Script wird erst geladen, wenn du mit dem Formular interagierst. Rechtsgrundlage ist unser berechtigtes Interesse
+    an der Abwehr von Missbrauch (Art. 6 Abs. 1 lit. f DSGVO). Cloudflare ist unter dem EU-US Data Privacy Framework zertifiziert.
+  </p>
+
+  <h2>5. Reichweitenmessung mit Plausible Analytics</h2>
+  <p>
+    Wir nutzen Plausible Analytics (Plausible Insights OÜ, Västriku tn 2, 50403 Tartu, Estland), ein datenschutzfreundliches Analysetool mit Servern in der
+    EU. Plausible setzt keine Cookies, speichert nichts auf deinem Gerät und erstellt keine Nutzerprofile. Erfasst werden zusammengefasste Daten wie
+    aufgerufene Seiten, Herkunftsseite, Kampagnenparameter, Gerätetyp, Land sowie Interaktionen (z. B. Klick auf einen Button, Absenden des Formulars – ohne
+    Inhalte). Deine IP-Adresse wird nur kurzzeitig zur Bildung eines täglich wechselnden Hashwerts verwendet und nicht gespeichert. Rechtsgrundlage ist
+    unser berechtigtes Interesse an der Verbesserung der Website (Art. 6 Abs. 1 lit. f DSGVO).
+  </p>
+
+  <h2>6. Karte</h2>
+  <p>
+    Die Standortkarte nutzt die Open-Source-Bibliothek MapLibre und Kartendaten von OpenStreetMap, die wir selbst ausliefern.
+    <span class="placeholder">[Falls stattdessen OpenFreeMap genutzt wird: Beim Laden der Karte wird deine IP-Adresse an den Kachelserver von OpenFreeMap übertragen.]</span>
+    Die Karte wird erst geladen, wenn du zum Abschnitt „Standorte“ scrollst.
+  </p>
+
+  <h2>7. Deine Rechte</h2>
+  <p>
+    Du hast das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung, Datenübertragbarkeit, Widerspruch sowie Widerruf erteilter
+    Einwilligungen. Wende dich dazu an <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+  </p>
+  <p>
+    Du kannst dich außerdem bei der österreichischen Datenschutzbehörde beschweren: Barichgasse 40–42, 1030 Wien,
+    <a href="https://www.dsb.gv.at" rel="noopener">dsb.gv.at</a>.
+  </p>
+</Legal>

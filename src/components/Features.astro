@@ -1,0 +1,135 @@
+---
+import { Image } from 'astro:assets';
+import controlRoom from '../assets/images/inside.png';
+import booth from '../assets/images/interior.jpg';
+
+const icons = {
+  clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  euro: '<path d="M17 6.5A6.5 6.5 0 1 0 17 17.5"/><path d="M4 10h9M4 14h9"/>',
+  mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M8 21h8"/>',
+  leaf: '<path d="M5 19c0-8 5-14 15-15-1 10-7 15-15 15Z"/><path d="M5 19 13 11"/>',
+  access: '<circle cx="12" cy="4.5" r="1.8"/><path d="M5 8.5h14M12 8.5v5l-3 7M12 13.5l3 7"/>',
+  pin: '<path d="M12 21s7-6.4 7-12a7 7 0 0 0-14 0c0 5.6 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/>',
+};
+
+const features = [
+  { icon: icons.clock, title: '24/7 verfügbar', text: 'Online-Buchung per App, automatischer Zugang per Code, keine Wartezeiten – auch um drei Uhr nachts.' },
+  { icon: icons.euro, title: 'Radikal günstig', text: '20 € pro Stunde, 10 € für Studierende. Möglich, weil Werbepartner den Großteil finanzieren.' },
+  { icon: icons.mic, title: 'Profi-Equipment', text: 'Hardware im Wert von 30.000 €: Neumann U87 Ai, FLEA 47, DAD-Interfaces und Studiomonitore.' },
+  { icon: icons.leaf, title: '100 % nachhaltig', text: 'Massivholz-Bau aus Brettsperrholz, Dachbegrünung und Solar-ready. Bindet CO₂ statt es auszustoßen.' },
+  { icon: icons.access, title: 'Barrierefrei', text: 'Rampe statt Stufen und ein durchdachter Grundriss – damit wirklich alle aufnehmen können.' },
+  { icon: icons.pin, title: 'Mitten in der Stadt', text: 'Gut erreichbar an Bahnhöfen, Unis und Plätzen. Dein Studio liegt auf dem Weg.' },
+];
+---
+
+<section id="funktionen" class="section" aria-labelledby="features-title" data-section="features">
+  <div class="container">
+    <p class="eyebrow">Funktionen & Vorteile</p>
+    <h2 id="features-title" class="section-title">Alles, was du für deine Session brauchst.</h2>
+    <p class="section-lead">Ein Cube, ein Code, deine Musik. Wir kümmern uns um Technik, Akustik und Zugang.</p>
+
+    <ul class="features">
+      {
+        features.map((f) => (
+          <li class="card feature">
+            <span class="feature__icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" set:html={f.icon} />
+            </span>
+            <h3>{f.title}</h3>
+            <p>{f.text}</p>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="gallery">
+      <figure>
+        <Image src={controlRoom} alt="Visualisierung des Regieplatzes im Cube mit Studiomonitoren, Bildschirm, Audio-Interfaces und Gitarre." widths={[480, 800, 1200]} sizes="(min-width: 768px) 50vw, 100vw" loading="lazy" />
+        <figcaption>Regieplatz mit Studiomonitoren und Interfaces</figcaption>
+      </figure>
+      <figure>
+        <Image src={booth} alt="Visualisierung des Aufnahmeraums im Cube mit Mikrofon, Keyboard und akustisch verkleideten Wänden." widths={[480, 800, 1200]} sizes="(min-width: 768px) 50vw, 100vw" loading="lazy" />
+        <figcaption>Aufnahmeraum mit Akustikverkleidung</figcaption>
+      </figure>
+    </div>
+    <p class="gallery__note">Visualisierungen. Die finale Ausstattung kann je nach Standort leicht abweichen.</p>
+  </div>
+</section>
+
+<style>
+  .features {
+    list-style: none;
+    margin: var(--space-2xl) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-md);
+  }
+  .feature {
+    padding: var(--space-lg);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .feature:hover {
+    border-color: var(--bcube-orange-a42);
+    transform: translateY(-2px);
+  }
+  .feature__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: var(--radius-input);
+    background: var(--bcube-orange-a12);
+    border: 1px solid var(--bcube-orange-a28);
+    color: var(--bcube-orange);
+  }
+  .feature__icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+  .feature h3 {
+    margin-top: var(--space-md);
+    font-size: 1.15rem;
+  }
+  .feature p {
+    margin-top: var(--space-xs);
+    color: var(--bcube-text-soft);
+  }
+  .gallery {
+    margin-top: var(--space-2xl);
+    display: grid;
+    gap: var(--space-md);
+  }
+  .gallery figure {
+    margin: 0;
+  }
+  .gallery :global(img) {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    border-radius: var(--radius-card);
+    border: 1px solid var(--bcube-line);
+  }
+  .gallery figcaption {
+    margin-top: var(--space-xs);
+    font-size: 0.9rem;
+    color: var(--bcube-text-soft);
+  }
+  .gallery__note {
+    margin-top: var(--space-md);
+    font-size: 0.82rem;
+    color: var(--bcube-text-faint);
+  }
+  @media (min-width: 640px) {
+    .features {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .gallery {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (min-width: 1024px) {
+    .features {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

@@ -1,0 +1,21 @@
+{
+  "generatedAt": "2026-10-10T09:10:32.314Z",
+  "source": "file",
+  "studios": [
+    {
+      "slug": "bcube-studio-hauptbahnhof",
+      "name": "BCube Hauptbahnhof Wien",
+      "kind": "cube",
+      "status": "coming_soon",
+      "statusLabel": "Ab 1. Februar 2027",
+      "street": "Alfred-Adler-Straße 55",
+      "plz": "1100",
+      "city": "Wien",
+      "country": "Österreich",
+      "lat": 48.1851,
+      "lng": 16.3795,
+      "teaser": "Unser erster Cube direkt am Wiener Hauptbahnhof – Profi-Recording rund um die Uhr, bestens erreichbar mit den Öffis.",
+      "image": "/studios/bcube-studio-hauptbahnhof.webp"
+    }
+  ]
+}

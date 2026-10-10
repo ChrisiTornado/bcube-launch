@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck (astro check)
+        run: npm run check
+
+      - name: Unit-Tests
+        run: npm test
+
+      - name: Build Website
+        run: npm run build
+        env:
+          PUBLIC_SITE_URL: https://bcube.at
+
+      - name: Build Lambda
+        run: npm run build:function
+
+      - name: Lighthouse (mobil, Budget ≥ 90)
+        run: npx lhci autorun
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lighthouse-report
+          path: .lighthouseci
+          retention-days: 14
+
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra/terraform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.9.8"
+      - run: terraform fmt -check -recursive
+      - run: mkdir -p ../../dist-function && echo "export const handler = () => {};" > ../../dist-function/index.mjs
+      - run: terraform init -backend=false -input=false
+      - run: terraform validate

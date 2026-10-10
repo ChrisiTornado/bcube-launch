@@ -1,0 +1,386 @@
+---
+import { CUSTOMER_ROLES, OPERATOR_ROLE, STUDIO_TYPES } from '../lib/roles';
+import { CONSENT_TEXT, CONSENT_TEXT_OPERATOR } from '../lib/consent';
+
+interface Props {
+  formId: string;
+  ctaLocation: string;
+  /** customer = Vormerkung mit Gratis-Session, operator = Anfrage als Partnerstudio (ohne Gratis-Session) */
+  audience?: 'customer' | 'operator';
+  variant?: 'full' | 'compact';
+  submitLabel?: string;
+}
+
+const { formId, ctaLocation, audience = 'customer', variant = 'full' } = Astro.props;
+const isOperator = audience === 'operator';
+const submitLabel = Astro.props.submitLabel ?? (isOperator ? 'Studio eintragen' : 'Gratis-Session sichern');
+
+// Exakt dieser Text wird serverseitig als Einwilligungsnachweis gespeichert (siehe src/lib/consent.ts).
+const [consentBefore, consentAfter] = (isOperator ? CONSENT_TEXT_OPERATOR : CONSENT_TEXT).split('Datenschutzerklärung');
+
+const id = (name: string) => `${formId}-${name}`;
+const districts = [
+  'Wien 1., Innere Stadt', 'Wien 2., Leopoldstadt', 'Wien 3., Landstraße', 'Wien 4., Wieden', 'Wien 5., Margareten',
+  'Wien 6., Mariahilf', 'Wien 7., Neubau', 'Wien 8., Josefstadt', 'Wien 9., Alsergrund', 'Wien 10., Favoriten',
+  'Wien 11., Simmering', 'Wien 12., Meidling', 'Wien 13., Hietzing', 'Wien 14., Penzing', 'Wien 15., Rudolfsheim-Fünfhaus',
+  'Wien 16., Ottakring', 'Wien 17., Hernals', 'Wien 18., Währing', 'Wien 19., Döbling', 'Wien 20., Brigittenau',
+  'Wien 21., Floridsdorf', 'Wien 22., Donaustadt', 'Wien 23., Liesing', 'Graz', 'Linz', 'Salzburg',
+  'Innsbruck', 'Klagenfurt',
+];
+---
+
+<div class="waitlist">
+  <form
+    class="form"
+    data-waitlist-form
+    data-form-id={formId}
+    data-audience={audience}
+    data-cta-location={ctaLocation}
+    novalidate
+    aria-describedby={id('privacy')}
+  >
+    <div class="form__grid">
+      <div class="field field--wide">
+        <label for={id('email')}>E-Mail-Adresse <span aria-hidden="true">*</span></label>
+        <input
+          id={id('email')}
+          name="email"
+          type="email"
+          inputmode="email"
+          autocomplete="email"
+          required
+          maxlength="254"
+          placeholder={isOperator ? 'studio@email.at' : 'deine@email.at'}
+          aria-describedby={id('email-error')}
+        />
+        <p class="field__error" id={id('email-error')} data-error-for="email" aria-live="polite"></p>
+      </div>
+
+      {
+        isOperator ? (
+          <input type="hidden" name="role" value={OPERATOR_ROLE} />
+        ) : (
+          <div class={`field ${variant === 'compact' ? 'field--wide' : ''}`}>
+            <label for={id('role')}>Ich bin … <span aria-hidden="true">*</span></label>
+            <select id={id('role')} name="role" required aria-describedby={id('role-error')}>
+              <option value="" selected disabled>Bitte auswählen</option>
+              {CUSTOMER_ROLES.map((r) => <option value={r.value}>{r.label}</option>)}
+            </select>
+            <p class="field__error" id={id('role-error')} data-error-for="role" aria-live="polite"></p>
+          </div>
+        )
+      }
+
+      {
+        !isOperator && variant === 'full' && (
+          <>
+            <div class="field">
+              <label for={id('name')}>
+                Vorname <span class="field__optional">(optional)</span>
+              </label>
+              <input id={id('name')} name="name" type="text" autocomplete="given-name" maxlength="80" aria-describedby={id('name-error')} />
+              <p class="field__error" id={id('name-error')} data-error-for="name" aria-live="polite" />
+            </div>
+            <div class="field field--wide">
+              <label for={id('city')}>
+                Wo hättest du gern einen Cube? <span class="field__optional">(optional)</span>
+              </label>
+              <input
+                id={id('city')}
+                name="city"
+                type="text"
+                list={id('districts')}
+                autocomplete="address-level2"
+                maxlength="60"
+                placeholder="z. B. Wien 7., Neubau"
+                aria-describedby={id('city-error')}
+              />
+              <datalist id={id('districts')}>
+                {districts.map((d) => (
+                  <option value={d} />
+                ))}
+              </datalist>
+              <p class="field__error" id={id('city-error')} data-error-for="city" aria-live="polite" />
+            </div>
+          </>
+        )
+      }
+
+      {
+        isOperator && (
+          <>
+            <div class="field">
+              <label for={id('name')}>
+                Ansprechperson <span class="field__optional">(optional)</span>
+              </label>
+              <input id={id('name')} name="name" type="text" autocomplete="name" maxlength="80" aria-describedby={id('name-error')} />
+              <p class="field__error" id={id('name-error')} data-error-for="name" aria-live="polite" />
+            </div>
+            <div class="field">
+              <label for={id('studioName')}>
+                Name des Studios <span aria-hidden="true">*</span>
+              </label>
+              <input
+                id={id('studioName')}
+                name="studioName"
+                type="text"
+                required
+                maxlength="80"
+                autocomplete="organization"
+                aria-describedby={id('studioName-error')}
+              />
+              <p class="field__error" id={id('studioName-error')} data-error-for="studioName" aria-live="polite"></p>
+            </div>
+            <div class="field">
+              <label for={id('studioCity')}>
+                Ort <span class="field__optional">(optional)</span>
+              </label>
+              <input id={id('studioCity')} name="studioCity" type="text" maxlength="60" placeholder="z. B. Wien 7., Neubau" />
+            </div>
+            <div class="field">
+              <label for={id('studioType')}>
+                Art <span class="field__optional">(optional)</span>
+              </label>
+              <select id={id('studioType')} name="studioType">
+                <option value="">Bitte auswählen</option>
+                {STUDIO_TYPES.map((t) => <option value={t.value}>{t.label}</option>)}
+              </select>
+            </div>
+            <div class="field field--wide">
+              <label for={id('studioWebsite')}>
+                Website <span class="field__optional">(optional)</span>
+              </label>
+              <input
+                id={id('studioWebsite')}
+                name="studioWebsite"
+                type="url"
+                inputmode="url"
+                maxlength="200"
+                placeholder="https://"
+                aria-describedby={id('studioWebsite-error')}
+              />
+              <p class="field__error" id={id('studioWebsite-error')} data-error-for="studioWebsite" aria-live="polite"></p>
+            </div>
+          </>
+        )
+      }
+    </div>
+
+    <!-- Honeypot: für Menschen unsichtbar, Bots füllen es aus -->
+    <div class="hp" aria-hidden="true">
+      <label for={id('company_website')}>Firmenwebsite</label>
+      <input id={id('company_website')} name="company_website" type="text" tabindex="-1" autocomplete="off" />
+    </div>
+
+    <div class="consent">
+      <input id={id('consent')} name="consent" type="checkbox" required aria-describedby={id('consent-error')} />
+      <label for={id('consent')}>
+        {consentBefore}<a href="/datenschutz/" target="_blank" rel="noopener">Datenschutzerklärung</a>{consentAfter}
+      </label>
+    </div>
+    <p class="field__error" id={id('consent-error')} data-error-for="consent" aria-live="polite"></p>
+
+    <div class="turnstile" data-turnstile></div>
+
+    <button type="submit" class="btn btn-primary form__submit" data-label={submitLabel}>
+      <span data-label>{submitLabel}</span>
+    </button>
+    <p class="form__status" data-form-status role="status" aria-live="polite"></p>
+    <p class="form__privacy" id={id('privacy')}>
+      Wir senden dir eine E-Mail zur Bestätigung (Double Opt-in).
+      {!isOperator && <>Es gelten die <a href="/teilnahmebedingungen/">Teilnahmebedingungen</a>.</>}
+      Kein Spam, keine Weitergabe.
+    </p>
+    {
+      !isOperator && (
+        <p class="form__switch">
+          Du betreibst ein Studio? <a href="#studios" data-cta-id="switch_to_operator" data-cta-location={ctaLocation} data-open-operator-form>Hier als Partnerstudio eintragen →</a>
+        </p>
+      )
+    }
+  </form>
+
+  <div class="form-success" data-form-success hidden tabindex="-1" role="status">
+    <span class="form-success__icon" aria-hidden="true">✓</span>
+    <h3>Fast geschafft!</h3>
+    {
+      isOperator ? (
+        <p>Wir haben dir eine E-Mail geschickt. Klick auf den Link darin, um deine Anfrage zu bestätigen – danach melden wir uns persönlich bei dir.</p>
+      ) : (
+        <p>
+          Wir haben dir eine E-Mail geschickt. Klick auf den Link darin, um deine Vormerkung zu bestätigen – erst dann ist deine Gratis-Session gesichert.
+        </p>
+      )
+    }
+    <p class="form-success__hint">Nichts angekommen? Schau im Spam-Ordner nach.</p>
+  </div>
+</div>
+
+<style>
+  .form__grid {
+    display: grid;
+    gap: var(--space-md);
+  }
+  .field {
+    display: grid;
+    gap: 0.4rem;
+    align-content: start;
+  }
+  label,
+  legend {
+    font-weight: var(--fw-semibold);
+    font-size: 0.95rem;
+  }
+  .field__optional {
+    color: var(--bcube-text-faint);
+    font-weight: var(--fw-regular);
+  }
+  input[type='email'],
+  input[type='text'],
+  input[type='url'],
+  select {
+    width: 100%;
+    min-height: 3rem;
+    padding: 0.7rem 1rem;
+    border-radius: var(--radius-input);
+    border: 1px solid var(--bcube-orange-a18);
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--bcube-text);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  select {
+    appearance: none;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23ffffffb8' stroke-width='2'%3E%3Cpath d='m5 8 5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.9rem center;
+    background-size: 1.1rem;
+    padding-right: 2.6rem;
+  }
+  select option {
+    background: #121212;
+    color: var(--bcube-text);
+  }
+  input::placeholder {
+    color: var(--bcube-text-faint);
+  }
+  input:hover,
+  select:hover {
+    border-color: var(--bcube-orange-a42);
+  }
+  input:focus-visible,
+  select:focus-visible {
+    outline: none;
+    border-color: var(--bcube-orange);
+    box-shadow: 0 0 0 4px var(--bcube-orange-a16);
+  }
+  [aria-invalid='true'] {
+    border-color: var(--bcube-error) !important;
+  }
+  .field__error {
+    min-height: 0;
+    color: var(--bcube-error);
+    font-size: 0.85rem;
+    font-weight: var(--fw-semibold);
+  }
+  .field__error:empty {
+    display: none;
+  }
+
+  .form__switch {
+    margin-top: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--bcube-line-soft);
+    font-size: 0.9rem;
+    color: var(--bcube-text-soft);
+  }
+  .hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .consent {
+    margin-top: var(--space-lg);
+    display: flex;
+    gap: var(--space-sm);
+    align-items: flex-start;
+  }
+  .consent input {
+    flex: none;
+    width: 1.3rem;
+    height: 1.3rem;
+    margin-top: 0.15rem;
+    accent-color: var(--bcube-orange);
+  }
+  .consent label {
+    font-weight: var(--fw-regular);
+    font-size: 0.88rem;
+    color: var(--bcube-text-soft);
+  }
+  .turnstile {
+    margin-top: var(--space-md);
+  }
+  .turnstile:empty {
+    margin-top: 0;
+  }
+  .form__submit {
+    margin-top: var(--space-lg);
+    width: 100%;
+    min-height: 3.4rem;
+    font-size: 1.05rem;
+  }
+  .form__status {
+    margin-top: var(--space-sm);
+    font-weight: var(--fw-semibold);
+  }
+  .form__status[data-kind='error'] {
+    color: var(--bcube-error);
+  }
+  .form__status:empty {
+    display: none;
+  }
+  .form__privacy {
+    margin-top: var(--space-md);
+    font-size: 0.82rem;
+    color: var(--bcube-text-faint);
+  }
+  .form-success {
+    text-align: center;
+    padding: var(--space-xl) var(--space-md);
+    outline: none;
+  }
+  .form-success__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    background: var(--bcube-orange);
+    color: var(--bcube-ink);
+    font-size: 1.7rem;
+    font-weight: var(--fw-black);
+  }
+  .form-success h3 {
+    margin-top: var(--space-md);
+    font-size: 1.6rem;
+    text-transform: uppercase;
+  }
+  .form-success p {
+    margin: var(--space-sm) auto 0;
+    max-width: 34rem;
+    color: var(--bcube-text-soft);
+  }
+  .form-success__hint {
+    font-size: 0.88rem;
+  }
+  @media (min-width: 640px) {
+    .form__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .field--wide {
+      grid-column: 1 / -1;
+    }
+  }
+</style>

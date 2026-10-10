@@ -1,0 +1,32 @@
+---
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  updated: string;
+}
+const { title, description, updated } = Astro.props;
+---
+
+<Base title={`${title} | BCube`} description={description} minimalHeader>
+  <section class="section legal">
+    <div class="container">
+      <article class="prose">
+        <h1>{title}</h1>
+        <p class="legal__updated">Stand: {updated}</p>
+        <slot />
+      </article>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .legal {
+    padding-top: var(--space-2xl);
+  }
+  .legal__updated {
+    color: var(--bcube-text-faint);
+    font-size: 0.9rem;
+  }
+</style>

@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base title="Vormerkung bestätigt | BCube" description="Vormerkung bestätigt" noindex minimalHeader>
+  <section class="section status">
+    <div class="container status__box card">
+      <span class="status__icon" aria-hidden="true">✓</span>
+      <h1>Du bist dabei!</h1>
+      <p>Danke für deine Bestätigung. Deine gratis 4-Stunden-Session ist gesichert – den Gutscheincode schicken wir dir zum Start am 1. Februar 2027.</p>
+      <a href="/#standorte" class="btn btn-primary">Zur Startseite</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .status__box {
+    max-width: 40rem;
+    margin-inline: auto;
+    padding: clamp(2rem, 6vw, 3.5rem);
+    text-align: center;
+    border-radius: var(--radius-panel);
+  }
+  .status__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    background: var(--bcube-orange);
+    color: var(--bcube-ink);
+    font-size: 2rem;
+    font-weight: var(--fw-black);
+  }
+  h1 {
+    margin-top: var(--space-lg);
+    font-size: clamp(1.7rem, 4vw, 2.4rem);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-title);
+  }
+  p {
+    margin: var(--space-md) 0 var(--space-xl);
+    color: var(--bcube-text-soft);
+  }
+</style>

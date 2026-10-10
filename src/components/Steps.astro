@@ -1,0 +1,68 @@
+---
+const steps = [
+  { title: 'Cube finden', text: 'Standort auf der Karte wählen und freie Slots im Kalender checken.' },
+  { title: 'Buchen & bezahlen', text: 'Zeit auswählen, per Karte oder Gutschein zahlen – in unter einer Minute erledigt.' },
+  { title: 'Code eingeben & aufnehmen', text: 'Du bekommst deinen persönlichen Zutrittscode. Tür auf, Mikro an, los geht’s.' },
+];
+---
+
+<section id="ablauf" class="section steps-section" aria-labelledby="steps-title" data-section="steps">
+  <div class="container">
+    <p class="eyebrow">So funktioniert’s</p>
+    <h2 id="steps-title" class="section-title">In drei Schritten zur Session.</h2>
+    <ol class="steps">
+      {
+        steps.map((s, i) => (
+          <li class="card step">
+            <span class="step__num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+    <div class="steps__cta">
+      <a href="#vormerken" class="btn btn-primary" data-cta-id="steps" data-cta-location="steps">Jetzt vormerken</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .steps {
+    list-style: none;
+    margin: var(--space-2xl) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-md);
+    counter-reset: step;
+  }
+  .step {
+    position: relative;
+    padding: var(--space-xl) var(--space-lg) var(--space-lg);
+    overflow: hidden;
+  }
+  .step__num {
+    display: block;
+    font-size: 3.25rem;
+    font-weight: var(--fw-black);
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1.5px var(--bcube-orange);
+  }
+  .step h3 {
+    margin-top: var(--space-md);
+    font-size: 1.25rem;
+  }
+  .step p {
+    margin-top: var(--space-xs);
+    color: var(--bcube-text-soft);
+  }
+  .steps__cta {
+    margin-top: var(--space-xl);
+  }
+  @media (min-width: 768px) {
+    .steps {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

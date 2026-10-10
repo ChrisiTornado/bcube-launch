@@ -1,0 +1,53 @@
+---
+import Legal from '../layouts/Legal.astro';
+import { CONTACT_EMAIL } from '../lib/config';
+---
+
+<Legal title="Impressum" description="Impressum und Offenlegung gemäß § 5 ECG und § 25 MedienG für die Website von BCube." updated="Oktober 2026">
+  <p class="placeholder">Vorlage – alle Angaben in [eckigen Klammern] vor dem Launch durch echte Daten ersetzen und prüfen lassen.</p>
+
+  <h2>Medieninhaber, Herausgeber und Diensteanbieter</h2>
+  <p>
+    <span class="placeholder">[Firmenwortlaut, z. B. BCube GmbH]</span><br />
+    <span class="placeholder">[Straße Hausnummer]</span><br />
+    <span class="placeholder">[PLZ Ort]</span><br />
+    Österreich
+  </p>
+
+  <h2>Kontakt</h2>
+  <p>E-Mail: <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a><br />Telefon: <span class="placeholder">[optional]</span></p>
+
+  <h2>Unternehmensangaben</h2>
+  <p>
+    Rechtsform: <span class="placeholder">[z. B. GmbH / e.U. / in Gründung]</span><br />
+    Firmenbuchnummer: <span class="placeholder">[FN …]</span><br />
+    Firmenbuchgericht: <span class="placeholder">[z. B. Handelsgericht Wien]</span><br />
+    UID-Nummer: <span class="placeholder">[ATU…]</span><br />
+    Geschäftsführung: <span class="placeholder">[Namen]</span><br />
+    Mitglied der: <span class="placeholder">[Wirtschaftskammer …, Fachgruppe …]</span><br />
+    Gewerbebehörde: <span class="placeholder">[zuständiges Magistratisches Bezirksamt / Bezirkshauptmannschaft]</span><br />
+    Anwendbare Rechtsvorschriften: Gewerbeordnung, abrufbar unter <a href="https://www.ris.bka.gv.at" rel="noopener">ris.bka.gv.at</a>
+  </p>
+
+  <h2>Unternehmensgegenstand</h2>
+  <p>Betrieb und Vermittlung von stundenweise buchbaren Musik- und Recording-Studios.</p>
+
+  <h2>Grundlegende Richtung (Blattlinie)</h2>
+  <p>Information über das Angebot von BCube und den Start der Plattform.</p>
+
+  <h2>Online-Streitbeilegung</h2>
+  <p>
+    Verbraucher:innen können sich mit Beschwerden an die Online-Streitbeilegungsplattform der EU wenden:
+    <a href="https://ec.europa.eu/odr" rel="noopener">ec.europa.eu/odr</a>. Wir sind zur Teilnahme an einem Streitbeilegungsverfahren nicht verpflichtet und
+    nicht bereit. <span class="placeholder">[prüfen, ob noch erforderlich]</span>
+  </p>
+
+  <h2>Haftung für Inhalte und Links</h2>
+  <p>
+    Die Inhalte dieser Website wurden sorgfältig erstellt. Für Richtigkeit, Vollständigkeit und Aktualität übernehmen wir keine Gewähr. Für Inhalte externer
+    Links sind ausschließlich deren Betreiber verantwortlich.
+  </p>
+
+  <h2>Bildnachweis</h2>
+  <p>Visualisierungen und Fotos: BCube. Kartendaten: © OpenStreetMap-Mitwirkende (ODbL).</p>
+</Legal>

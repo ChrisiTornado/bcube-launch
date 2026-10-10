@@ -1,0 +1,102 @@
+---
+import { config } from '../lib/config';
+
+// Platzhalter – nur mit echten, freigegebenen Zitaten befüllen (PUBLIC_SHOW_SOCIAL_PROOF=true).
+const quotes: { text: string; author: string; role: string }[] = [
+  { text: '[Zitat einer Testnutzerin / eines Testnutzers]', author: '[Name]', role: '[Band / Projekt]' },
+  { text: '[Zitat einer Testnutzerin / eines Testnutzers]', author: '[Name]', role: '[Producer:in]' },
+];
+const showQuotes = config.showSocialProof;
+const leadCount = config.leadCount;
+---
+
+<section class="section proof" aria-labelledby="proof-title" data-section="social_proof">
+  <div class="container">
+    <p class="eyebrow">Bereits an Bord</p>
+    <h2 id="proof-title" class="section-title">Starke Partner von Anfang an.</h2>
+    <ul class="proof__facts">
+      <li class="card">
+        <strong>Holzbau Willinger</strong>
+        <span>
+          Unser Holzbau-Partner aus Königsbrunn (NÖ) –
+          <a href="https://www.holzbau-willinger.at/" target="_blank" rel="noopener">holzbau-willinger.at</a>
+        </span>
+      </li>
+      <li class="card">
+        <strong>Investment gesichert</strong>
+        <span>Die Finanzierung für den Start steht.</span>
+      </li>
+      {
+        leadCount > 0 && (
+          <li class="card">
+            <strong>{leadCount.toLocaleString('de-AT')}+</strong>
+            <span>Musiker:innen haben sich schon vorgemerkt.</span>
+          </li>
+        )
+      }
+    </ul>
+    {
+      showQuotes && (
+        <ul class="proof__quotes">
+          {quotes.map((q) => (
+            <li class="card">
+              <blockquote>
+                <p>„{q.text}“</p>
+              </blockquote>
+              <p class="proof__author">
+                <strong>{q.author}</strong> · {q.role}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .proof__facts,
+  .proof__quotes {
+    list-style: none;
+    margin: var(--space-2xl) 0 0;
+    padding: 0;
+    display: grid;
+    gap: var(--space-md);
+  }
+  .proof__facts li {
+    padding: var(--space-lg);
+    display: grid;
+    gap: 0.25rem;
+  }
+  .proof__facts strong {
+    font-size: 1.35rem;
+    font-weight: var(--fw-black);
+    color: var(--bcube-orange);
+  }
+  .proof__facts span {
+    color: var(--bcube-text-soft);
+  }
+  .proof__facts a {
+    color: var(--bcube-orange);
+    font-weight: var(--fw-semibold);
+  }
+  .proof__quotes li {
+    padding: var(--space-lg);
+  }
+  blockquote {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+  .proof__author {
+    margin-top: var(--space-sm);
+    color: var(--bcube-text-soft);
+  }
+  @media (min-width: 768px) {
+    .proof__facts {
+      grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    }
+    .proof__quotes {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+</style>
